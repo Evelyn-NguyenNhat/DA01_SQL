@@ -15,3 +15,8 @@ FROM pharmacy_sales
 GROUP BY manufacturer
 ORDER BY SUM(total_sales) DESC, manufacturer;
 /*Ex4*/
+SELECT ROUND (AVG(stars),2) AS avg_stars, product_id AS product, 
+EXTRACT(MONTH FROM submit_date) AS mth
+FROM reviews
+GROUP BY mth, product_id
+ORDER BY mth, product_id;
