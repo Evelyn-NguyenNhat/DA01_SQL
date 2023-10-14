@@ -49,4 +49,6 @@ select POSITION ('a' IN first_name)
 FROM worker
 WHERE worker_id=4;
 /*Ex10*/ 
-
+SELECT id,
+SUBSTRING (title, length(winery)+1,4) AS year
+from winemag_p2
