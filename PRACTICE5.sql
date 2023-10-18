@@ -39,3 +39,11 @@ INNER JOIN employees AS mng
 ON emp.reports_to= mng.employee_id 
 GROUP BY mng.employee_id, mng.name
 ORDER BY mng.employee_id 
+/*ex6*/ 
+SELECT products.product_name, SUM(orders.unit) AS unit
+FROM products 
+INNER JOIN orders 
+ON  products.product_id= orders.product_id
+WHERE MONTH(order_date)=02 AND YEAR(order_date)=2020
+GROUP BY products.product_name
+HAVING SUM(orders.unit)>=100 
