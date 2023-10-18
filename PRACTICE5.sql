@@ -47,3 +47,11 @@ ON  products.product_id= orders.product_id
 WHERE MONTH(order_date)=02 AND YEAR(order_date)=2020
 GROUP BY products.product_name
 HAVING SUM(orders.unit)>=100 
+/*ex7*/ 
+SELECT page_id
+FROM pages
+WHERE NOT EXISTS (
+  SELECT page_id
+  FROM page_likes AS likes
+  WHERE likes.page_id = pages.page_id
+)
