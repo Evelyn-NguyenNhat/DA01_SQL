@@ -62,7 +62,8 @@ GROUP BY name_city
 ORDER BY doanhthu DESC;
 
 -- Question 8: 
-SELECT b.city AS name_city, SUM(e.amount) AS doanhthu
+SELECT b.city ||' , '|| a.country AS info,
+SUM(e.amount) AS doanhthu
 FROM country AS a
 INNER JOIN city AS b
 ON a.country_id =b.country_id
@@ -72,5 +73,6 @@ INNER JOIN customer AS d
 ON c.address_id=d.address_id
 INNER JOIN payment AS e
 ON d.customer_id= e.customer_id
-GROUP BY name_city
+GROUP BY info
 ORDER BY doanhthu DESC;
+
