@@ -24,5 +24,6 @@ INNER JOIN category AS c
 ON b.category_id= c.category_id
 WHERE c.name='Drama' OR c.name='Sports'
 ORDER BY length DESC;
+
 -- Question 4:
 
