@@ -34,3 +34,10 @@ INNER JOIN category AS c
 ON b.category_id=c.category_id
 GROUP BY category
 ORDER BY COUNT DESC;
+-- Question 5:
+SELECT a.first_name, a.last_name, COUNT(b.film_id) AS SOLUONG
+FROM actor AS a
+INNER JOIN film_actor AS b 
+ON a.actor_id=b.actor_id 
+GROUP BY a.first_name, a.last_name
+ORDER BY SOLUONG DESC;
