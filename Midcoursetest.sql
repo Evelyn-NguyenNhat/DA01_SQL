@@ -26,4 +26,11 @@ WHERE c.name='Drama' OR c.name='Sports'
 ORDER BY length DESC;
 
 -- Question 4:
-
+SELECT c.name AS category, COUNT(*)
+FROM film AS a
+INNER JOIN film_category AS b 
+ON a.film_id=b.film_id
+INNER JOIN category AS c
+ON b.category_id=c.category_id
+GROUP BY category
+ORDER BY COUNT DESC;
