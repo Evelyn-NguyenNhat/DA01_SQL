@@ -41,3 +41,9 @@ INNER JOIN film_actor AS b
 ON a.actor_id=b.actor_id 
 GROUP BY a.first_name, a.last_name
 ORDER BY SOLUONG DESC;
+-- Question 6: 
+SELECT COUNT (a.address_id)
+FROM address AS a
+LEFT JOIN customer AS b 
+ON a.address_id=b.address_id
+WHERE b.address_id IS NULL;
