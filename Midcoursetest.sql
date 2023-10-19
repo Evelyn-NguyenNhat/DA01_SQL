@@ -47,3 +47,16 @@ FROM address AS a
 LEFT JOIN customer AS b 
 ON a.address_id=b.address_id
 WHERE b.address_id IS NULL;
+-- Question 7: 
+SELECT b.city AS name_city, SUM(e.amount) AS doanhthu
+FROM country AS a
+INNER JOIN city AS b
+ON a.country_id =b.country_id
+INNER JOIN address AS c
+ON b.city_id=c.city_id
+INNER JOIN customer AS d
+ON c.address_id=d.address_id
+INNER JOIN payment AS e
+ON d.customer_id= e.customer_id
+GROUP BY name_city
+ORDER BY doanhthu DESC;
