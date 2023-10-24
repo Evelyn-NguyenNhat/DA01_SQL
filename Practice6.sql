@@ -36,3 +36,20 @@ WHERE page_id NOT IN
 FROM page_likes 
 WHERE page_likes.page_id=pages.page_id
 )
+/** EX5 **/ 
+with prev_month AS
+(SELECT user_id,extract(month from event_date) as month,event_id FROM user_actions
+where event_type in ('sign-in', 'like', 'comment')
+and extract(month from event_date)=6 
+and extract(year from event_date)=2022
+),
+ current_month AS
+(SELECT user_id,extract(month from event_date) as month,event_id FROM user_actions
+where event_type in ('sign-in', 'like', 'comment')
+and extract(month from event_date)=7
+and extract(year from event_date)=2022
+)
+select c.month,count(DISTINCT c.user_id) from current_month c
+join prev_month P 
+on p.user_id=c.user_id
+group by c.month
