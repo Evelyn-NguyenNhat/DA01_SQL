@@ -20,3 +20,11 @@ RANK()OVER (
     GROUP BY category, product ) AS subquery
 WHERE ranking<=2
 ORDER BY category, ranking;
+/** Ex3 **/ 
+SELECT COUNT(policy_holder_id) AS member_count
+FROM
+(
+SELECT policy_holder_id, 
+COUNT(case_id) AS count
+GROUP BY policy_holder_id
+HAVING COUNT(case_id)>=3 ) AS subquery;
