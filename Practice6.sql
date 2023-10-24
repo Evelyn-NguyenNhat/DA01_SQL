@@ -28,3 +28,11 @@ SELECT policy_holder_id,
 COUNT(case_id) AS count
 GROUP BY policy_holder_id
 HAVING COUNT(case_id)>=3 ) AS subquery;
+/** Ex4**/ 
+SELECT page_id 
+FROM pages
+WHERE page_id NOT IN 
+(SELECT page_id 
+FROM page_likes 
+WHERE page_likes.page_id=pages.page_id
+)
