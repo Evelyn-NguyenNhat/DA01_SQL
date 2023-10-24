@@ -6,7 +6,7 @@ COUNT(job_id) AS job_numbers
 FROM job_listings 
 GROUP BY company_id, title, description
 HAVING COUNT(job_id)>1
-) AS sunquery;
+) AS subquery;
 /** EX2**/ 
 SELECT category, product, total_spend
 FROM 
