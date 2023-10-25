@@ -53,3 +53,14 @@ select c.month,count(DISTINCT c.user_id) from current_month c
 join prev_month P 
 on p.user_id=c.user_id
 group by c.month
+
+/** ex6 **/ 
+select
+date_format(trans_date, '%Y-%m') AS month,
+country,
+count(trans_date) as trans_count,
+sum(amount) as trans_total_amount,
+sum(state = 'approved') as approved_count,
+sum(case when state = 'approved' then amount else 0 end) as approved_total_amount
+from transactions
+group by DATE_FORMAT(trans_date, '%Y-%m'), country
