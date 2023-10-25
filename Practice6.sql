@@ -86,3 +86,23 @@ FROM employees
 WHERE salary <30000
 AND manager_id IS NOT NULL 
 AND manager_id NOT IN (SELECT employee_id FROM Employees)
+/**ex11**/ 
+(SELECT a.name AS results
+FROM users AS a
+JOIN MovieRating AS b 
+ON a.user_id=b.user_id
+GROUP BY 1
+ORDER BY COUNT(rating) DESC, 1 ASC
+LIMIT 1
+)
+UNION 
+(
+    SELECT title AS results
+    FROM movies 
+    JOIN MovieRating 
+    ON movies.movie_id= MovieRating.movie_id 
+    WHERE EXTRACT(MONTH FROM created_at)=2
+    GROUP BY 1
+    ORDER BY AVG(rating) DESC, 1 ASC
+    LIMIT 1
+)
