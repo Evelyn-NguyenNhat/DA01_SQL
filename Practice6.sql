@@ -64,3 +64,9 @@ sum(state = 'approved') as approved_count,
 sum(case when state = 'approved' then amount else 0 end) as approved_total_amount
 from transactions
 group by DATE_FORMAT(trans_date, '%Y-%m'), country
+/** ex7 **/ 
+Select b.product_id, min(year) as first_year,a.quantity,a.price
+from sales as a
+left join product as b
+on a.product_id=b.product_id
+group by product_id
