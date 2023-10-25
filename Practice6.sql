@@ -80,3 +80,9 @@ WHERE a.customer_id IN (
     GROUP BY a.customer_id
     HAVING COUNT(DISTINCT a.product_key) = (SELECT COUNT(DISTINCT product_key) FROM product)
 );
+/** Ex9 **/ 
+SELECT employee_id 
+FROM employees 
+WHERE salary <30000
+AND manager_id IS NOT NULL 
+AND manager_id NOT IN (SELECT employee_id FROM Employees)
