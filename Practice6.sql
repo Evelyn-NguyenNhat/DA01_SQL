@@ -70,3 +70,13 @@ from sales as a
 left join product as b
 on a.product_id=b.product_id
 group by product_id
+/** ex8 **/ 
+SELECT DISTINCT a.customer_id
+FROM customer AS a
+WHERE a.customer_id IN (
+    SELECT a.customer_id
+    FROM customer AS a
+    JOIN product AS b ON a.product_key = b.product_key
+    GROUP BY a.customer_id
+    HAVING COUNT(DISTINCT a.product_key) = (SELECT COUNT(DISTINCT product_key) FROM product)
+);
