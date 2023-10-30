@@ -42,3 +42,44 @@ SELECT
   ,2) AS rolling_avg_3d
 FROM tweets;
 /*ex6*/ 
+SELECT COUNT(merchant_id) AS payment_count
+FROM (
+  SELECT
+    transaction_id,
+    merchant_id,
+    credit_card_id,
+    amount,
+    transaction_timestamp,
+    EXTRACT(EPOCH FROM (transaction_timestamp - LAG(transaction_timestamp) OVER (PARTITION BY merchant_id, credit_card_id, amount ORDER BY transaction_timestamp)))/60 AS minute_difference
+  FROM transactions
+) AS subquery
+WHERE minute_difference <= 10;
+/*Ex7*/
+
+SELECT category, product, total_spend
+FROM 
+(SELECT category, product, 
+SUM(spend) AS total_spend, 
+RANK()OVER ( PARTITION BY category ORDER BY SUM(spend) DESC) AS ranking 
+FROM product_spend 
+WHERE EXTRACT(YEAR FROM transaction_date)=2022
+GROUP BY category, product) AS subquery
+WHERE ranking<=2
+ORDER BY category, ranking;
+
+/*eX8*/
+
+With top_10_song AS
+(SELECT artists.artist_name, 
+DENSE_RANK() OVER(ORDER BY COUNT(songs.song_id) DESC) AS artist_rank 
+FROM artists
+INNER JOIN songs
+ON artists.artist_id=songs.artist_id 
+INNER JOIN global_song_rank AS ranking
+ON songs.song_id= ranking.song_id
+WHERE ranking.rank<=10
+GROUP BY artists.artist_name
+)
+SELECT artist_name, artist_rank 
+FROM top_10_song 
+WHERE artist_rank <=5;
