@@ -16,3 +16,16 @@ case when id%2 = 0 then (lag(student) over (order by id))
 else ifnull(lead(student) over (order by id),student)
 END as "student"
 from Seat
+/*Ex4*/ 
+With CTE AS
+(SELECT visited_on,
+SUM(amount) amount
+FROM Customer
+GROUP BY visited_on)
+
+SELECT visited_on, 
+SUM(amount) OVER(ORDER BY visited_on ROWS 6 PRECEDING) amount, 
+ROUND(AVG(amount)OVER (ORDER BY visited_on ROWS 6 PRECEDING),2) AS average_amount
+FROM CTE 
+ORDER BY visited_on
+LIMIT 100 OFFSET 6;
