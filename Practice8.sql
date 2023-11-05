@@ -9,3 +9,10 @@ SELECT customer_id, min(order_date)
 FROM delivery 
 GROUP BY customer_id);
 /* Ex2*/
+
+/*Ex3*/ 
+select id,
+case when id%2 = 0 then (lag(student) over (order by id))
+else ifnull(lead(student) over (order by id),student)
+END as "student"
+from Seat
