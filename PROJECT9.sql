@@ -146,8 +146,8 @@ WHERE quantityordered IN (SELECT quantityordered FROM TWT_outlier);
 DELETE FROM sales_dataset_rfm_prj
 WHERE quantityordered IN (SELECT quantityordered FROM TWT_outlier);
 
-SELECT * INTO newtable 
-FROM sales_dataset_rfm_prj;
+CREATE TABLE SALES_DATASET_RFM_PRJ_CLEAN AS 
+SELECT * FROM sales_dataset_rfm_prj
 
 
 
