@@ -79,7 +79,7 @@ ORDER BY month, rank_per_month;
 
 SELECT 
 FORMAT_DATE('%Y-%m-%d', DATE(b.created_at)) AS
-date, a.category AS product_category, SUM(a.retail_price) AS revenue
+date, a.category AS product_category, ROUND(SUM(b.sale_price),2) AS revenue
 FROM bigquery-public-data.thelook_ecommerce.products AS a
 INNER JOIN bigquery-public-data.thelook_ecommerce.order_items AS b
 ON a.id=b.id
