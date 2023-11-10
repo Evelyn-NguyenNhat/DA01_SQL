@@ -2,7 +2,7 @@
 ---1. Số lượng đơn hàng và số lượng khách hàng mỗi tháng
 SELECT COUNT(DISTINCT user_id), COUNT(order_id), FORMAT_DATE('%Y-%m', DATE (created_at)) as month_year,
 FROM  bigquery-public-data.thelook_ecommerce.order_items
-WHERE shipped_at >= '2019-01-01' AND shipped_at <='2022-04-30'
+WHERE created_at >= '2019-01-01' AND created_at <='2022-04-30'
 GROUP BY 3
 ORDER BY 3;
 ---2 Giá trị đơn hàng trung bình (AOV) và số lượng khách hàng mỗi tháng
@@ -40,9 +40,9 @@ SELECT
     WHEN oldest_age THEN 'Lớn nhất'
     ELSE 'Không thuộc nhóm trẻ nhất hoặc lớn nhất'
   END AS tuoi,
-  COUNT(*) AS so_luong
+  COUNT(*) AS so_luong, gender
 FROM twt_cte
-GROUP BY  youngest_age, oldest_age;
+GROUP BY  youngest_age, oldest_age,gender;
 -- 4. Top 5 sản phẩm mỗi tháng.
 WITH monthly_profit AS (
   SELECT
