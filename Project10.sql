@@ -87,3 +87,65 @@ WHERE FORMAT_DATE('%Y-%m-%d', DATE(b.created_at))>='2022-01-15' AND
 FORMAT_DATE('%Y-%m-%d', DATE(b.created_at)) <='2022-04-15'
 GROUP BY date,product_category
 ORDER BY date, product_category;
+
+-- PHẦN 2
+WITH cte AS (
+  SELECT
+    user_id,
+    sale_price,
+    FORMAT_DATE('%Y-%m', DATE(first_purchase_date)) AS cohort_date,
+    created_at,
+    (EXTRACT(YEAR FROM created_at) - EXTRACT(YEAR FROM first_purchase_date)) * 12 +
+    (EXTRACT(MONTH FROM created_at) - EXTRACT(MONTH FROM first_purchase_date)) + 1 AS index
+  FROM (
+    SELECT
+      user_id,
+      sale_price,
+      MIN(created_at) OVER (PARTITION BY user_id) AS first_purchase_date,
+      created_at
+    FROM bigquery-public-data.thelook_ecommerce.order_items
+    WHERE status = 'Complete'
+  )
+)
+
+, cte2 AS (
+  SELECT
+    cohort_date,
+    index,
+    COUNT(DISTINCT user_id) AS cnt,
+    SUM(sale_price) AS revenue
+  FROM cte
+  WHERE index <= 4
+  GROUP BY 1, 2
+  ORDER BY cohort_date
+)
+
+, customer_cohort AS (
+  SELECT
+    cohort_date,
+    SUM(CASE WHEN index = 1 THEN cnt ELSE 0 END) AS t1,
+    SUM(CASE WHEN index = 2 THEN cnt ELSE 0 END) AS t2,
+    SUM(CASE WHEN index = 3 THEN cnt ELSE 0 END) AS t3,
+    SUM(CASE WHEN index = 4 THEN cnt ELSE 0 END) AS t4
+  FROM cte2
+  GROUP BY cohort_date
+  ORDER BY cohort_date
+)
+
+, retention_cohort AS (
+  SELECT
+    cohort_date,
+    ROUND(100.00 * t1 / t1, 2) || '%' AS t1,
+    ROUND(100.00 * t2 / t1, 2) || '%' AS t2,
+    ROUND(100.00 * t3 / t1, 2) || '%' AS t3,
+    ROUND(100.00 * t4 / t1, 2) || '%' AS t4
+  FROM customer_cohort
+)
+
+SELECT
+  cohort_date,
+  (100 - ROUND(100.00 * t1 / t1, 2)) || '%' AS t1,
+  (100 - ROUND(100.00 * t2 / t1, 2)) || '%' AS t2,
+  (100 - ROUND(100.00 * t3 / t1, 2)) || '%' AS t3,
+  (100 - ROUND(100.00 * t4 / t1, 2)) || '%' AS t4
+FROM customer_cohort;
